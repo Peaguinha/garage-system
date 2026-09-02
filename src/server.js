@@ -1,5 +1,5 @@
-const express = require('express');
-require('dotenv').config();
+const express = require("express");
+require("dotenv").config();
 
 const express = require('express');
 require('dotenv').config();
@@ -17,23 +17,35 @@ const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 
+// Health Check
 app.get("/health", (req, res) => {
     res.json({
         status: "OK",
         service: "Garage System",
-    })
+    });
 });
 
-// TODO: módulos de servicos, pecas, ordens-servico e auth/JWT serão
-// adicionados pelos demais integrantes (ver Divisão de Atividades - Fase 1).
-app.use('/api/clientes', clienteRoutes);
-app.use('/api/veiculos', veiculoRoutes);
-
-async function start() {
-    await connectDatabase();
-    app.listen(PORT, () => {
-        console.log(`Garage System is running on port ${PORT}`);
+// Rota protegida - autenticação
+app.get("/protected", authMiddleware, (req, res) => {
+    res.status(200).json({
+        message: "Acesso autorizado",
+        user: req.user
     });
-}
+});
 
-start();
+// Rota protegida - autenticação + autorização
+app.get(
+    "/admin",
+    authMiddleware,
+    roleMiddleware("ADMIN"),
+    (req, res) => {
+        res.status(200).json({
+            message: "Acesso autorizado",
+            user: req.user
+        });
+    }
+);
+
+app.listen(PORT, () => {
+    console.log(`Garage System is running on port ${PORT}`);
+});
