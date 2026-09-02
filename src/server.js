@@ -1,10 +1,15 @@
 const express = require('express');
 require('dotenv').config();
 
-const mongoose = require('mongoose');
+const express = require('express');
+require('dotenv').config();
+
 const connectDatabase = require('./config/database');
 const clienteRoutes = require('./routes/clienteRoutes');
 const veiculoRoutes = require('./routes/veiculoRoutes');
+
+const authMiddleware = require("./middlewares/authMiddleware");
+const roleMiddleware = require("./middlewares/roleMiddleware");
 
 const app = express();
 
