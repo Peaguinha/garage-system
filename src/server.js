@@ -46,6 +46,7 @@ app.get(
     }
 );
 
+const servicosRoutes = require('./routes/servicos.routes'); const pecasRoutes = require('./routes/pecas.routes'); app.use('/api/servicos', servicosRoutes); app.use('/api/pecas', pecasRoutes);
 app.listen(PORT, () => {
     console.log(`Garage System is running on port ${PORT}`);
 });
