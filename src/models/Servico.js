@@ -1,38 +1,36 @@
-const { Schema, model } = require('mongoose');
-
 /**
- * Coleção: servicos
- * Responsável: Integrante 4 (Israel Neto)
+ * Model provisório de Serviço.
+ * Responsabilidade oficial de Israel (módulo "Serviços + Peças").
+ * Criado aqui apenas com os campos mínimos necessários para o módulo de
+ * Ordens de Serviço funcionar de forma independente. Ao subir o branch
+ * dele, este arquivo deve ser substituído/mesclado com o model definitivo.
  */
-const ServicoSchema = new Schema(
-  {
-    nome: {
-      type: String,
-      required: [true, 'O nome do serviço é obrigatório.'],
-      trim: true,
+const mongoose = require('mongoose');
+
+const servicoSchema = new mongoose.Schema(
+    {
+        nome: {
+            type: String,
+            required: [true, 'Nome do serviço é obrigatório'],
+            trim: true,
+        },
+        descricao: {
+            type: String,
+            trim: true,
+        },
+        valor: {
+            type: Number,
+            required: [true, 'Valor do serviço é obrigatório'],
+            min: [0.01, 'Valor do serviço deve ser maior que zero'],
+        },
+        tempoEstimado: {
+            type: Number, // em minutos
+        },
     },
-    descricao: {
-      type: String,
-      required: [true, 'A descrição do serviço é obrigatória.'],
-      trim: true,
-    },
-    valor: {
-      type: Number,
-      required: [true, 'O valor do serviço é obrigatório.'],
-      validate: {
-        validator: (v) => v > 0,
-        message: 'O valor do serviço deve ser maior que zero.',
-      },
-    },
-    ativo: {
-      type: Boolean,
-      default: true,
-    },
-  },
-  {
-    timestamps: true,
-    versionKey: false,
-  }
+    {
+        timestamps: true,
+        collection: 'servicos',
+    }
 );
 
-module.exports = model('Servico', ServicoSchema, 'servicos');
+module.exports = mongoose.model('Servico', servicoSchema);

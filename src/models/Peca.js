@@ -1,43 +1,43 @@
-const { Schema, model } = require('mongoose');
-
 /**
- * Coleção: pecas
- * Responsável: Integrante 4 (Israel Neto)
+ * Model provisório de Peça.
+ * Responsabilidade oficial de Israel (módulo "Serviços + Peças").
+ * Criado aqui apenas com os campos mínimos necessários para o módulo de
+ * Ordens de Serviço funcionar de forma independente. Ao subir o branch
+ * dele, este arquivo deve ser substituído/mesclado com o model definitivo.
  */
-const PecaSchema = new Schema(
-  {
-    nome: {
-      type: String,
-      required: [true, 'O nome da peça é obrigatório.'],
-      trim: true,
+const mongoose = require('mongoose');
+
+const pecaSchema = new mongoose.Schema(
+    {
+        nome: {
+            type: String,
+            required: [true, 'Nome da peça é obrigatório'],
+            trim: true,
+        },
+        codigo: {
+            type: String,
+            trim: true,
+        },
+        fabricante: {
+            type: String,
+            trim: true,
+        },
+        preco: {
+            type: Number,
+            required: [true, 'Preço da peça é obrigatório'],
+            min: [0.01, 'Preço da peça deve ser maior que zero'],
+        },
+        quantidadeDisponivel: {
+            type: Number,
+            required: [true, 'Quantidade disponível é obrigatória'],
+            min: [0, 'Quantidade disponível não pode ser negativa'],
+            default: 0,
+        },
     },
-    descricao: {
-      type: String,
-      trim: true,
-      default: '',
-    },
-    preco: {
-      type: Number,
-      required: [true, 'O preço da peça é obrigatório.'],
-      validate: {
-        validator: (v) => v > 0,
-        message: 'O preço da peça deve ser maior que zero.',
-      },
-    },
-    quantidadeDisponivel: {
-      type: Number,
-      required: [true, 'A quantidade disponível é obrigatória.'],
-      default: 0,
-      validate: {
-        validator: (v) => v >= 0,
-        message: 'A quantidade disponível não pode ser negativa.',
-      },
-    },
-  },
-  {
-    timestamps: true,
-    versionKey: false,
-  }
+    {
+        timestamps: true,
+        collection: 'pecas',
+    }
 );
 
-module.exports = model('Peca', PecaSchema, 'pecas');
+module.exports = mongoose.model('Peca', pecaSchema);

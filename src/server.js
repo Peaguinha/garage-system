@@ -1,21 +1,23 @@
 const express = require("express");
 require("dotenv").config();
 
-const express = require('express');
-require('dotenv').config();
-
-const connectDatabase = require('./config/database');
-const clienteRoutes = require('./routes/clienteRoutes');
-const veiculoRoutes = require('./routes/veiculoRoutes');
-
+const connectDatabase = require("./config/database");
 const authMiddleware = require("./middlewares/authMiddleware");
 const roleMiddleware = require("./middlewares/roleMiddleware");
+
+const clienteRoutes = require("./routes/clienteRoutes");
+const veiculoRoutes = require("./routes/veiculoRoutes");
+const ordemServicoRoutes = require("./routes/ordemServicoRoutes");
 
 const app = express();
 
 const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
+
+app.use("/api/clientes", clienteRoutes);
+app.use("/api/veiculos", veiculoRoutes);
+app.use("/api/ordens-servico", ordemServicoRoutes);
 
 // Health Check
 app.get("/health", (req, res) => {
@@ -46,7 +48,12 @@ app.get(
     }
 );
 
-const servicosRoutes = require('./routes/servicos.routes'); const pecasRoutes = require('./routes/pecas.routes'); app.use('/api/servicos', servicosRoutes); app.use('/api/pecas', pecasRoutes);
-app.listen(PORT, () => {
-    console.log(`Garage System is running on port ${PORT}`);
-});
+connectDatabase()
+    .then(() => {
+        app.listen(PORT, () => {
+            console.log(`Garage System is running on port ${PORT}`);
+        });
+    })
+    .catch(() => {
+        process.exit(1);
+    });
