@@ -6,6 +6,8 @@ const connectDatabase = require("./config/database");
 const authMiddleware = require("./middlewares/authMiddleware");
 const roleMiddleware = require("./middlewares/roleMiddleware");
 const authRoutes = require("./routes/authRoutes");
+const servicosRoutes = require("./routes/servicos.routes");
+const pecasRoutes = require("./routes/pecas.routes");
 
 const clienteRoutes = require("./routes/clienteRoutes");
 const veiculoRoutes = require("./routes/veiculoRoutes");
@@ -21,6 +23,8 @@ app.use("/api/clientes", clienteRoutes);
 app.use("/api/veiculos", veiculoRoutes);
 app.use("/api/ordens-servico", ordemServicoRoutes);
 app.use("/api/auth", authRoutes);
+app.use("/api/servicos", servicosRoutes);
+app.use("/api/pecas", pecasRoutes);
 
 // Health Check
 app.get("/health", (req, res) => {
