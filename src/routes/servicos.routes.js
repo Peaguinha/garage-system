@@ -1,16 +1,44 @@
 const { Router } = require('express');
+
 const ServicoController = require('../controllers/ServicoController');
-// Middlewares de autenticação/autorização — a implementar pelo Integrante 1.
-const { authenticate, authorize } = require('../middlewares/auth');
+
+const authMiddleware = require('../middlewares/authMiddleware');
+const roleMiddleware = require('../middlewares/roleMiddleware');
 
 const router = Router();
 
-router.use(authenticate);
+// Todas as rotas de serviços exigem autenticação.
+router.use(authMiddleware);
 
-router.post('/', authorize(['ADMIN', 'ATENDENTE']), ServicoController.criar);
-router.get('/', ServicoController.listar);
-router.get('/:id', ServicoController.buscarPorId);
-router.put('/:id', authorize(['ADMIN', 'ATENDENTE']), ServicoController.atualizar);
-router.delete('/:id', authorize(['ADMIN']), ServicoController.remover);
+// Apenas ADMIN e ATENDENTE podem cadastrar serviços.
+router.post(
+    '/',
+    roleMiddleware('ADMIN'),
+    ServicoController.criar
+);
+
+// Usuários autenticados podem consultar serviços.
+router.get(
+    '/',
+    ServicoController.listar
+);
+
+router.get(
+    '/:id',
+    ServicoController.buscarPorId
+);
+
+// Apenas ADMIN pode alterar/remover serviços.
+router.put(
+    '/:id',
+    roleMiddleware('ADMIN'),
+    ServicoController.atualizar
+);
+
+router.delete(
+    '/:id',
+    roleMiddleware('ADMIN'),
+    ServicoController.remover
+);
 
 module.exports = router;
