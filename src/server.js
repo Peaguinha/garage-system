@@ -1,7 +1,6 @@
 const express = require("express");
 require("dotenv").config();
 
-
 const connectDatabase = require("./config/database");
 const authMiddleware = require("./middlewares/authMiddleware");
 const roleMiddleware = require("./middlewares/roleMiddleware");
@@ -12,6 +11,7 @@ const pecasRoutes = require("./routes/pecas.routes");
 const clienteRoutes = require("./routes/clienteRoutes");
 const veiculoRoutes = require("./routes/veiculoRoutes");
 const ordemServicoRoutes = require("./routes/ordemServicoRoutes");
+const { createApolloServer } = require("./graphql");
 
 const app = express();
 
@@ -56,11 +56,14 @@ app.get(
 );
 
 connectDatabase()
-    .then(() => {
+    .then(async () => {
+        await createApolloServer(app);
+
         app.listen(PORT, () => {
             console.log(`Garage System is running on port ${PORT}`);
         });
     })
-    .catch(() => {
+    .catch((error) => {
+        console.error("Erro ao iniciar aplicação:", error);
         process.exit(1);
     });

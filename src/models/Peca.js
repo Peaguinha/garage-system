@@ -1,10 +1,3 @@
-/**
- * Model provisório de Peça.
- * Responsabilidade oficial de Israel (módulo "Serviços + Peças").
- * Criado aqui apenas com os campos mínimos necessários para o módulo de
- * Ordens de Serviço funcionar de forma independente. Ao subir o branch
- * dele, este arquivo deve ser substituído/mesclado com o model definitivo.
- */
 const mongoose = require('mongoose');
 
 const pecaSchema = new mongoose.Schema(
