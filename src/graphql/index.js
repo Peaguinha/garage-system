@@ -17,13 +17,9 @@ const createApolloServer = async (app) => {
         "/graphql",
         expressMiddleware(apolloServer, {
             context: async ({ req }) => {
-                console.log("AUTH HEADER:", req.headers.authorization);
-
                 const user = getUserFromToken(
                     req.headers.authorization
                 );
-
-                console.log("USER:", user);
 
                 return {
                     user,
