@@ -2,7 +2,7 @@ const PecaRepository = require('../repositories/PecaRepository');
 const AppError = require('../utils/AppError');
 
 class PecaService {
-    async criar({ nome, descricao, preco, quantidadeDisponivel }) {
+    async criar({ nome, codigo, fabricante, preco, quantidadeDisponivel }) {
         if (!nome) {
             throw new AppError('Nome da peça é obrigatório.');
         }
@@ -22,7 +22,8 @@ class PecaService {
 
         return PecaRepository.criar({
             nome,
-            descricao,
+            codigo,
+            fabricante,
             preco,
             quantidadeDisponivel: quantidadeDisponivel ?? 0,
         });
